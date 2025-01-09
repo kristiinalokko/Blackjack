@@ -26,11 +26,11 @@ public class Deck {
         return deck;
     }
 
-    public void shuffle() {
-        Collections.shuffle(deckInPlay);
+    public static void shuffle(List<Card> deck) {
+        Collections.shuffle(deck);
     }
 
-    public Card drawNewCard() {
+    public static Card drawNewCard(List<Card> deckInPlay) {
         if (deckInPlay.isEmpty()) {
             throw new IllegalStateException("The deck is empty.");
         }

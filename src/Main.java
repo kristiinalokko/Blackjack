@@ -4,15 +4,36 @@ public class Main {
     public static void main(String[] args) {
 
         Deck deckInGame = new Deck();
-        deckInGame.setNumberOfDecksInPlay(2);
+
+        deckInGame.setNumberOfDecksInPlay(1);
+//        for (int i = 0; i < 52; i++) {
+//            System.out.println(deckInGame.getDeckInPlay().get(i));
+//        }
+
+        Deck.shuffle(deckInGame.getDeckInPlay());
+        deckInGame = playOneRound(deckInGame);
+
         for (int i = 0; i < 52; i++) {
             System.out.println(deckInGame.getDeckInPlay().get(i));
         }
 
 
+    }
 
+    private static Deck playOneRound(Deck deck) {
+        Card[] dealersHand = {Deck.drawNewCard(deck.getDeckInPlay()), Deck.drawNewCard(deck.getDeckInPlay())};
+        Card[] playersHand = {Deck.drawNewCard(deck.getDeckInPlay()), Deck.drawNewCard(deck.getDeckInPlay())};
 
+        for (int i = 0; i < 2; i++) {
+            System.out.print(playersHand[i] + " ");
+        }
 
+        for (int i = 0; i < 2; i++) {
+            System.out.print(dealersHand[i] + " ");
+        }
+        System.out.println();
+
+        return deck;
     }
 
 

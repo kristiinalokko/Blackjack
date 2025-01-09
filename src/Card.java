@@ -10,9 +10,11 @@ public class Card {
         this.value = getValueForRank(String.valueOf(rank));
     }
 
+
+
     private int getValueForRank(String rank) {
         int value = 0;
-        if (rank.equals("ACE")) {value = 1;}
+        if (rank.equals("ACE")) {value = 11;}
         if (rank.equals("TWO")) {value = 2;}
         if (rank.equals("THREE")) {value = 3;}
         if (rank.equals("FOUR")) {value = 4;}
@@ -62,7 +64,7 @@ public class Card {
 
     @Override
     public String toString() {
-        return rank + " of " + suit;
+        return rank.toLowerCase() + " of " + suit.toLowerCase();
     }
 
 
