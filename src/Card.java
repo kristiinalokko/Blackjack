@@ -3,6 +3,15 @@ public class Card {
     String suit;
     String rank;
     int value;
+    boolean faceDown = false;
+
+    public boolean isFaceDown() {
+        return faceDown;
+    }
+
+    public void setFaceDown(boolean faceDown) {
+        this.faceDown = faceDown;
+    }
 
     public Card(Suit suit, Rank rank) {
         this.suit = String.valueOf(suit);

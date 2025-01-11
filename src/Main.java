@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -6,34 +10,123 @@ public class Main {
         Deck deckInGame = new Deck();
 
         deckInGame.setNumberOfDecksInPlay(1);
-//        for (int i = 0; i < 52; i++) {
+//        for (int i = 0; i < deckInGame.getDeckInPlay().length(); i++) {
 //            System.out.println(deckInGame.getDeckInPlay().get(i));
 //        }
 
         Deck.shuffle(deckInGame.getDeckInPlay());
         deckInGame = playOneRound(deckInGame);
 
-        for (int i = 0; i < 52; i++) {
-            System.out.println(deckInGame.getDeckInPlay().get(i));
-        }
-
 
     }
 
     private static Deck playOneRound(Deck deck) {
-        Card[] dealersHand = {Deck.drawNewCard(deck.getDeckInPlay()), Deck.drawNewCard(deck.getDeckInPlay())};
-        Card[] playersHand = {Deck.drawNewCard(deck.getDeckInPlay()), Deck.drawNewCard(deck.getDeckInPlay())};
 
-        for (int i = 0; i < 2; i++) {
-            System.out.print(playersHand[i] + " ");
+        Scanner in = new Scanner(System.in);
+
+        int valueOfDealersHand;
+        int valueOfPlayersHand;
+
+        List<Card> dealersHand = new ArrayList<>();
+        List<Card> playersHand = new ArrayList<>();
+
+        Card nextCard = Deck.drawNewCard(deck.getDeckInPlay());
+        nextCard.setFaceDown(true);
+        dealersHand.add(nextCard);
+        dealersHand.add(Deck.drawNewCard(deck.getDeckInPlay()));
+        playersHand.add(Deck.drawNewCard(deck.getDeckInPlay()));
+        playersHand.add(Deck.drawNewCard(deck.getDeckInPlay()));
+
+        valueOfPlayersHand = totalValueOfHand(playersHand);
+        valueOfDealersHand = totalValueOfHand(dealersHand);
+
+        System.out.println("Dealer's hand: ");
+        printHand(dealersHand);
+        System.out.println("Dealer's hand value : " + valueOfDealersHand);
+        System.out.println("Player's hand: ");
+        printHand(playersHand);
+        System.out.println("Player's hand value : " + valueOfPlayersHand);
+
+        while (valueOfPlayersHand < 21) {
+            System.out.println();
+            System.out.println("Hit or Stand?");
+
+            String s = in.nextLine();
+            s.toLowerCase();
+            if (s.equals("hit")) {
+                playersHand.add(Deck.drawNewCard(deck.getDeckInPlay()));
+                valueOfPlayersHand = totalValueOfHand(playersHand);
+                System.out.println("Player's hand: ");
+                printHand(playersHand);
+                System.out.println("Player's hand value : " + valueOfPlayersHand);
+            }
+            if (s.equals("stand")) {
+                break;
+            }
         }
 
-        for (int i = 0; i < 2; i++) {
-            System.out.print(dealersHand[i] + " ");
+        for (Card card : dealersHand) {
+            card.setFaceDown(false);
         }
-        System.out.println();
+        valueOfDealersHand = totalValueOfHand(dealersHand);
+        System.out.println("Dealer's hand: ");
+        printHand(dealersHand);
+        System.out.println("Dealer's hand value : " + valueOfDealersHand);
+
+        if (valueOfPlayersHand > 21) {
+            System.out.println("Player busts! Dealer wins");
+            return deck;
+        }
+        if (valueOfPlayersHand == 21 && valueOfDealersHand != 21) {
+            System.out.println("Blackjack! Player wins");
+            return deck;
+        }
+        if (valueOfPlayersHand != 21 && valueOfDealersHand == 21) {
+            System.out.println("Blackjack! Dealer wins");
+            return deck;
+        }
+
+        while (valueOfDealersHand < 17) {
+            dealersHand.add(Deck.drawNewCard(deck.getDeckInPlay()));
+            valueOfDealersHand = totalValueOfHand(dealersHand);
+            System.out.println(" Dealer hits. Dealer's hand: ");
+            printHand(dealersHand);
+            System.out.println("Dealer's hand value : " + valueOfDealersHand);
+        }
+
+        if (valueOfDealersHand > 21) {
+            System.out.println("Dealer busts! Player wins");}
+        else if (valueOfDealersHand > valueOfPlayersHand) {
+            System.out.println("Dealer wins");
+        } else if (valueOfPlayersHand > valueOfDealersHand) {
+            System.out.println("Player wins");
+        } else {
+            System.out.println("wtf");
+        }
 
         return deck;
+    }
+
+    private static void printHand(List<Card> hand) {
+        for (Card card : hand) {
+            if (card.isFaceDown()) {
+                System.out.println("*** of ***");
+            } else {
+                System.out.println(card.toString());
+            }
+        }
+    }
+
+    private static int totalValueOfHand(List<Card> playersHand) {
+        int value = 0;
+
+        for (Card card : playersHand) {
+            if (!card.isFaceDown()) {
+                value += card.getValue();
+            }
+        }
+
+        return value;
     }
 
 
